@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="glass-card p-6">
+    <h2 class="text-xl font-bold mb-2">📄 Relatório</h2>
+    <p>Gere um PDF com os resultados processados.</p>
+
+    <div class="mt-4">
+        <a href="{% url 'relatorio' %}" class="btn-neon">⬇️ Baixar PDF</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cálculo ICMS - PE</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body class="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-800 text-white min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="glass-card flex justify-between items-center p-4 m-4">
+        <h1 class="text-2xl font-bold flex items-center gap-2">⚡ Cálculo ICMS - PE</h1>
+        <nav class="space-x-2">
+            <a href="{% url 'upload' %}" class="btn-nav">Upload</a>
+            <a href="{% url 'resultado' %}" class="btn-nav">Resultado</a>
+            <a href="{% url 'analysis' %}" class="btn-nav">Análise</a>
+            <a href="{% url 'calculadora' %}" class="btn-nav">Calculadora</a>
+            <a href="{% url 'relatorio' %}" class="btn-nav">Relatório</a>
+        </nav>
+    </header>
+
+    <main class="flex-grow p-6">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="text-center p-4 text-sm text-gray-300">
+        Developed by <strong>Arthur Monteiro</strong>
+    </footer>
+</body>
+
+</html>

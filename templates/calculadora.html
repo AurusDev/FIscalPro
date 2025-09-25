@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mx-auto max-w-6xl">
+
+    <div class="card p-6 md:p-8 mb-8">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="text-2xl">🧮</span>
+            <h2 class="text-2xl md:text-3xl font-semibold">Calculadora de ICMS</h2>
+        </div>
+
+        <p class="text-sm md:text-base text-gray-300 mb-6">
+            Calcule o ICMS manualmente ou, se houver planilha enviada, use as alíquotas do NCM.
+        </p>
+
+        <!-- Formulário -->
+        <form method="post" action="{% url 'calculadora' %}">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Base de Cálculo -->
+                <div>
+                    <label class="block text-sm mb-2">Base de Cálculo</label>
+                    <input type="text" name="base_calculo" class="input-neon w-full" placeholder="ex: 1000"
+                        value="{{ request.POST.base_calculo|default:'' }}" required>
+                </div>
+
+                <!-- NCM -->
+                <div>
+                    <label class="block text-sm mb-2">NCM (opcional — usar da planilha)</label>
+                    <input type="text" name="ncm" class="input-neon w-full" placeholder="ex: 123"
+                        value="{{ request.POST.ncm|default:'' }}">
+                    {% if sugestao_origem and sugestao_destino %}
+                    <p class="text-xs text-gray-400 mt-2">
+                        Alíquotas sugeridas pela planilha → Origem: {{ sugestao_origem }}% | Destino: {{
+                        sugestao_destino }}%
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Aliquota Origem -->
+                <div>
+                    <label class="block text-sm mb-2">Alíquota Origem (%)</label>
+                    <input type="text" name="aliq_origem" class="input-neon w-full" placeholder="ex: 12.0"
+                        value="{{ request.POST.aliq_origem|default:'' }}">
+                </div>
+
+                <!-- Aliquota Destino -->
+                <div>
+                    <label class="block text-sm mb-2">Alíquota Destino (%)</label>
+                    <input type="text" name="aliq_destino" class="input-neon w-full" placeholder="ex: 18.0"
+                        value="{{ request.POST.aliq_destino|default:'' }}">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-neon w-full mt-6">
+                Calcular
+            </button>
+        </form>
+    </div>
+
+    <!-- Resultado -->
+    <div class="card p-6 md:p-8 mt-8">
+        <h3 class="text-xl md:text-2xl font-semibold mb-6">Resultado</h3>
+
+        {% if resultado %}
+        <!-- Cards principais -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="card-sub p-5 text-center">
+                <div class="text-sm opacity-70 mb-1">ICMS Origem</div>
+                <div class="text-2xl font-bold text-green-400">
+                    R$ {{ resultado.icms_origem }}
+                </div>
+            </div>
+            <div class="card-sub p-5 text-center">
+                <div class="text-sm opacity-70 mb-1">DIFAL</div>
+                <div class="text-2xl font-bold text-yellow-400">
+                    R$ {{ resultado.difal }}
+                </div>
+            </div>
+            <div class="card-sub p-5 text-center">
+                <div class="text-sm opacity-70 mb-1">ICMS Destino</div>
+                <div class="text-2xl font-bold text-blue-400">
+                    R$ {{ resultado.icms_destino }}
+                </div>
+            </div>
+            <div class="card-sub p-5 text-center">
+                <div class="text-sm opacity-70 mb-1">Total ICMS</div>
+                <div class="text-2xl font-bold text-purple-400">
+                    R$ {{ resultado.total }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards extras com detalhes -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="card-sub p-4">
+                <p class="text-sm opacity-70">Base de Cálculo</p>
+                <p class="font-semibold">R$ {{ resultado.base }}</p>
+            </div>
+            <div class="card-sub p-4">
+                <p class="text-sm opacity-70">NCM</p>
+                <p class="font-semibold">{{ resultado.ncm }}</p>
+            </div>
+            <div class="card-sub p-4">
+                <p class="text-sm opacity-70">Alíquota Origem</p>
+                <p class="font-semibold">{{ resultado.aliq_origem }}%</p>
+            </div>
+            <div class="card-sub p-4">
+                <p class="text-sm opacity-70">Alíquota Destino</p>
+                <p class="font-semibold">{{ resultado.aliq_destino }}%</p>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-gray-400">Nenhum cálculo realizado ainda.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

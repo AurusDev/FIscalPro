@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="glass-card p-6">
+    <h2 class="text-xl font-bold mb-4">🚀 Escolha uma funcionalidade</h2>
+
+    <section class="mb-8">
+        <h3 class="text-lg font-semibold mb-2">📁 Upload</h3>
+        <p class="mb-3">Envie sua planilha Excel para iniciar os cálculos de ICMS.</p>
+
+        <form method="post" enctype="multipart/form-data" class="space-y-3">
+            {% csrf_token %}
+            <input type="file" name="file" accept=".xlsx" class="input-neon" required>
+            <button type="submit" class="btn-neon w-full">🚀 Enviar e Processar</button>
+        </form>
+
+        <p class="text-xs opacity-80 mt-2">Suporta .xlsx (200MB máx.).</p>
+    </section>
+
+    {% if error %}
+    <p class="text-red-400 mt-2">{{ error }}</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2 class="text-xl font-bold mb-4">📄 Relatório</h2>
+    <p>Resumo com métricas principais antes do download do PDF.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+        <div class="p-4 rounded bg-purple-900 bg-opacity-40 shadow-md text-center">
+            <span class="block text-lg font-bold">Linhas</span>
+            <span class="text-purple-300 font-semibold">{{ rows }}</span>
+        </div>
+        <div class="p-4 rounded bg-purple-900 bg-opacity-40 shadow-md text-center">
+            <span class="block text-lg font-bold">Base de Cálculo</span>
+            <span class="text-purple-300 font-semibold">R$ {{ base|floatformat:2 }}</span>
+        </div>
+        <div class="p-4 rounded bg-purple-900 bg-opacity-40 shadow-md text-center">
+            <span class="block text-lg font-bold">ICMS Origem</span>
+            <span class="text-purple-300 font-semibold">R$ {{ origem|floatformat:2 }}</span>
+        </div>
+        <div class="p-4 rounded bg-purple-900 bg-opacity-40 shadow-md text-center">
+            <span class="block text-lg font-bold">ICMS Destino</span>
+            <span class="text-purple-300 font-semibold">R$ {{ destino|floatformat:2 }}</span>
+        </div>
+        <div class="p-4 rounded bg-purple-900 bg-opacity-40 shadow-md text-center">
+            <span class="block text-lg font-bold">DIFAL</span>
+            <span class="text-purple-300 font-semibold">R$ {{ difal|floatformat:2 }}</span>
+        </div>
+        <div class="p-4 rounded bg-purple-900 bg-opacity-40 shadow-md text-center">
+            <span class="block text-lg font-bold">Total ICMS</span>
+            <span class="text-purple-300 font-semibold">R$ {{ total|floatformat:2 }}</span>
+        </div>
+    </div>
+
+    <div class="mt-6 flex space-x-4">
+        <a href="{% url 'result' %}" class="btn-secondary">⬅️ Voltar ao Resultado</a>
+        <a href="{% url 'report' %}?download=1" class="btn-primary">⬇️ Baixar PDF</a>
+    </div>
+</div>
+{% endblock %}
