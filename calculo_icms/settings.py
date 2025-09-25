@@ -1,12 +1,20 @@
-import dj_database_url
-import os
 from pathlib import Path
+import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-me")
-DEBUG = os.getenv("DEBUG", "False") == "True"
-ALLOWED_HOSTS = ["*"]  # Railway vai atribuir o domínio automaticamente
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-secret-key-change-me")
+
+# Em produção, deixe False
+DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
+
+# Incluí o domínio do Railway + localhost para testes
+ALLOWED_HOSTS = [
+    "calculoicms.up.railway.app",
+    "127.0.0.1",
+    "localhost"
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -20,7 +28,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # <-- Importante para Railway servir staticfiles
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -50,9 +57,11 @@ TEMPLATES = [
 WSGI_APPLICATION = "calculo_icms.wsgi.application"
 ASGI_APPLICATION = "calculo_icms.asgi.application"
 
+# ✅ Banco de dados Railway (Postgres) ou SQLite local
 DATABASES = {
     "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
     )
 }
 
@@ -63,11 +72,10 @@ TIME_ZONE = "America/Recife"
 USE_I18N = True
 USE_TZ = True
 
-# Arquivos estáticos
+# ✅ Arquivos estáticos para produção
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Sessão – guardar dataframe
-SESSION_COOKIE_AGE = 60 * 60 * 6
+# Sessão – vamos guardar dataframe serializado
+SESSION_COOKIE_AGE = 60 * 60 * 6  # 6h
