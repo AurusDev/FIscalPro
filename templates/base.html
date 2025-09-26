@@ -3,17 +3,26 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Cálculo ICMS - PE</title>
+    <title>FiscalPro – Análise & Cálculo de ICMS</title>
     {% load static %}
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+
+    <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Seu CSS -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
+
 
 <body class="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-800 text-white min-h-screen flex flex-col">
 
     <!-- Header -->
     <header class="glass-card flex justify-between items-center p-4 m-4">
-        <h1 class="text-2xl font-bold flex items-center gap-2">⚡ Cálculo ICMS - PE</h1>
+        <h1 class="text-2xl font-bold flex items-center gap-2">⚡ FiscalPro v1.0.0</h1>
         <nav class="space-x-2">
             <a href="{% url 'upload' %}" class="btn-nav">Upload</a>
             <a href="{% url 'resultado' %}" class="btn-nav">Resultado</a>
