@@ -1,1 +1,1 @@
-web: gunicorn calculo_icms.wsgi
+web: gunicorn calculo_icms.wsgi --log-file -
