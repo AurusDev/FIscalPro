@@ -9,7 +9,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-me")
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# Render passa o domínio, mas você pode fixar também
+# Render passa o domínio, mas você pode definir no painel
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
 
 INSTALLED_APPS = [
@@ -24,6 +24,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # 👈 para servir estáticos
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -53,8 +54,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "calculo_icms.wsgi.application"
 ASGI_APPLICATION = "calculo_icms.asgi.application"
 
-# 📦 Banco de dados
-# Render define DATABASE_URL automaticamente quando você cria um PostgreSQL
+# 📦 Banco de dados (Postgres no Render / SQLite local)
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
@@ -70,10 +70,13 @@ TIME_ZONE = "America/Recife"
 USE_I18N = True
 USE_TZ = True
 
-# 📂 Arquivos estáticos (necessário pro collectstatic)
+# 📂 Arquivos estáticos
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]  # pasta com seus arquivos CSS/JS
+STATIC_ROOT = BASE_DIR / "staticfiles"    # destino do collectstatic
+
+# WhiteNoise otimizado
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -82,5 +85,5 @@ SESSION_COOKIE_AGE = 60 * 60 * 6  # 6h
 
 # 🔐 CSRF confiável (importante em produção)
 CSRF_TRUSTED_ORIGINS = [
-    "https://seuapp.onrender.com",  # substitua pelo domínio real do Render
+    "https://seuapp.onrender.com",  # substitua pelo domínio do Render
 ]
